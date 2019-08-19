@@ -1,5 +1,6 @@
 import React, { Fragment, Component } from "react";
 import Navbar from "./components/layout/Navbar";
+import Users from "./components/users/Users";
 import "./App.css";
 
 // function App() {
@@ -31,7 +32,11 @@ class App extends Component {
     return (
       <div className="App">
         {" "}
-        <Navbar />
+        <Navbar title="Github Finder" icon="fab fa-github" />
+        <div className="container">
+          <Users />
+        </div>
+        {/*you can pass in values for our properties, as shown here with title */}
       </div>
     );
 
