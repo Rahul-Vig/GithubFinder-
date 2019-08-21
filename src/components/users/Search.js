@@ -38,6 +38,7 @@ export class Search extends Component {
             type="text"
             name="text"
             value={this.state.text}
+            placeholder="Search for Users..."
             onChange={this.onChange}
           />
           <input
