@@ -31,7 +31,8 @@ class App extends Component {
     users: [],
     user: {},
     loading: false, //loading needed while data is being loaded.
-    alert: null
+    alert: null,
+    repos: []
   };
 
   //************ componentDidMount Usage with axios. This dictates what happens when your component launces **************/
@@ -50,9 +51,7 @@ class App extends Component {
   searchUsers = async text => {
     this.setState({ loading: true });
     const res = await axios.get(
-      `https://api.github.com/search/users?q=${text}&client_id=${
-        process.env.REACT_APP_GITHUB_CLIENT_ID
-      }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
     );
     console.log(res.data);
     this.setState({ users: res.data.items, loading: false, alert: null });
@@ -67,12 +66,20 @@ class App extends Component {
   getUser = async username => {
     this.setState({ loading: true });
     const res = await axios.get(
-      `https://api.github.com/users?${username}?client_id=${
-        process.env.REACT_APP_GITHUB_CLIENT_ID
-      }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
     );
-    console.log(res.data);
+    //console.log(res.data);
     this.setState({ user: res.data, loading: false, alert: null });
+  };
+
+  //Get users repos
+  getUserRepos = async username => {
+    this.setState({ loading: true });
+    const res = await axios.get(
+      `https://api.github.com/users/${username}/repos?sort=created:asc&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+    //console.log(res.data);
+    this.setState({ repos: res.data, loading: false, alert: null });
   };
 
   //Set alert upon improper usage
@@ -124,6 +131,8 @@ class App extends Component {
                 <User
                   {...props}
                   getUser={this.getUser}
+                  getUserRepos={this.getUserRepos}
+                  repos={this.state.repos}
                   user={this.state.user}
                   loading={this.state.loading}
                 />
